@@ -1,0 +1,18 @@
+group_created: "A group has been created in <a href=\"%{group_link}\">%{text}</a>. It will delete itself briefly if no one joins."
+
+unknown_server: "Unknown server was provided: %{server}."
+
+invalid_command: "Invalid command."
+
+insuficient_arguments: "Invalid number of arguments were provided."
+
+no_permissions: "You don't have permissions to run that."
+
+user_not_found: "%{user} not found."
+
+user_found: "Found %{user} on <a href=\"%{url}\">%{channel}</a>."
+
+greetings:
+  - "Ohai!"
+  - "Well, hello there!"
+  - "lolno"

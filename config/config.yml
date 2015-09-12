@@ -1,0 +1,12 @@
+ENV: 'DEV'
+DEV_CHANNEL: Daemiens Bot Lounge
+PRODUCTION_CHANNEL: Daemiens Bot Lounge
+PANIC_CHANNEL: Daemiens Bot Lounge
+
+username: 'Daemobot'
+address: 'mumble-eu.koalabeast.com'
+
+mods:
+  - Daemien
+  - Carbon
+  - Damien
