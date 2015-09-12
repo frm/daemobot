@@ -1,8 +1,8 @@
-module Daemon
+module Daemobot
   module Bootstrap
     def self.run
-      Daemon::Config.load
-      Daemon::MessageBuilder.load
+      Daemobot::Config.load
+      Daemobot::MessageBuilder.load
     end
   end
 end

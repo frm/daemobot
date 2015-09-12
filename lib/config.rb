@@ -1,15 +1,15 @@
 require 'yaml'
 
-module Daemon
+module Daemobot
   module Config
     CONFIG_FILE = 'config/config.yml'
 
     def self.load
-      @config ||= Daemon::Utils.symbolize_hash( YAML.load_file(CONFIG_FILE) )
+      @config ||= Daemobot::Utils.symbolize_hash( YAML.load_file(CONFIG_FILE) )
     end
 
     def self.load!
-      @config = Daemon::Utils.symbolize_hash( YAML.load_file(CONFIG_FILE) )
+      @config = Daemobot::Utils.symbolize_hash( YAML.load_file(CONFIG_FILE) )
     end
 
     def self.env

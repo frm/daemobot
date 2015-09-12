@@ -1,16 +1,16 @@
 require 'yaml'
 
-module Daemon
+module Daemobot
   class MessageBuilder
     MESSAGE_FILE = 'config/messages.yml'
 
     def self.load
-      @messages ||= Daemon::Utils.symbolize_hash( YAML.load_file(MESSAGE_FILE) )
+      @messages ||= Daemobot::Utils.symbolize_hash( YAML.load_file(MESSAGE_FILE) )
       nil
     end
 
     def self.load!
-      @messages = Daemon::Utils.symbolize_hash( YAML.load_file(MESSAGE_FILE) )
+      @messages = Daemobot::Utils.symbolize_hash( YAML.load_file(MESSAGE_FILE) )
       nil
     end
 
@@ -34,7 +34,7 @@ module Daemon
       @messages[:user_not_found] % { user: username }
     end
 
-    def self.found_user(username, channel, url)
+    def self.found_user(username, channel, url = channel)
       @messages[:user_found] % { user: username, channel: channel, url: url }
     end
 
