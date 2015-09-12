@@ -6,6 +6,8 @@ PANIC_CHANNEL: Daemiens Bot Lounge
 username: 'Daemobot'
 address: 'mumble-eu.koalabeast.com'
 
+data_folder: 'data'
+
 mods:
   - Daemien
   - Carbon

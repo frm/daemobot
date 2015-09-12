@@ -30,6 +30,14 @@ module Daemobot
       @messages[:greetings].sample
     end
 
+    def self.greet_set(user)
+      @messages[:greet_set] % { user: user }
+    end
+
+    def self.no_greet(user)
+      @messages[:no_greet] % { user: user }
+    end
+
     def self.user_not_found(username)
       @messages[:user_not_found] % { user: username }
     end
