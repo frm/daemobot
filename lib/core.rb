@@ -1,4 +1,3 @@
-require 'pry'
 module Daemobot
   class Core
     TEXT_CALLBACKS = {
@@ -10,7 +9,8 @@ module Daemobot
       join: "join",
       find: "find",
       setgreet: "set_greet",
-      greet: "greet"
+      greet: "greet",
+      help: "print_help"
     }
 
     def initialize
@@ -89,6 +89,13 @@ module Daemobot
       validate_command('greet', data, nr_args: 0) do |args|
         user = @mumble.find_user data.actor
         reply = Data.greet(user) || MessageBuilder.no_greet(user)
+        @mumble.reply(data, reply)
+      end
+    end
+
+    def print_help(data)
+      validate_command('help', data, nr_args: 0) do
+        reply = Data.help || MessageBuilder.no_help_file
         @mumble.reply(data, reply)
       end
     end

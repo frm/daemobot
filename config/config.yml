@@ -3,10 +3,11 @@ DEV_CHANNEL: Daemiens Bot Lounge
 PRODUCTION_CHANNEL: Daemiens Bot Lounge
 PANIC_CHANNEL: Daemiens Bot Lounge
 
-username: 'Daemobot'
+username: Daemobot
 address: 'mumble-eu.koalabeast.com'
 
 data_folder: 'data'
+help_file: 'data/help.html'
 
 mods:
   - Daemien

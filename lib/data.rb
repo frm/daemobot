@@ -10,14 +10,21 @@ module Daemobot
 
 
     def self.greet(username)
-      file = filename username
-      File.exists?(file) ? File.read(file) : nil
+      read_or_nil(filename username)
+    end
+
+    def self.help
+      read_or_nil Config.help_file
     end
 
     private
 
     def self.filename(username)
       "data/#{username}.txt"
+    end
+
+    def self.read_or_nil(filename)
+      File.exists?(filename) ? File.read(filename) : nil
     end
   end
 end
