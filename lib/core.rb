@@ -124,7 +124,7 @@ module Daemobot
     def validate_args(captures, nr_args: nil, sep: ' ')
       args = parse_args(captures, sep)
       if nr_args.nil? || args.length == nr_args
-        yield args.map(&:strip)
+        yield args.map{ |s| s.strip.gsub('&quot;', '') }
       else
         MessageBuilder.insuficient_arguments
       end
