@@ -18,6 +18,14 @@ no_greet: "No custom greeting defined for %{user}."
 
 no_help_file: "No help file was found. Blame the devs!"
 
+no_stream: "No streams available at the moment."
+
+stream_set: "Stream was set!"
+
+invalid_stream: "Invalid stream."
+
+stream_reset: "Stream was reset!"
+
 greetings:
   - "Ohai!"
   - "Well, hello there!"

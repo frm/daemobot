@@ -13,6 +13,21 @@ module Daemobot
       read_or_nil(filename username)
     end
 
+    def self.set_stream(stream)
+      url = stream.match(/^<a.+?href=\"(.+)\".+>$/)
+      valid = url && url[1] =~ /\A#{URI::regexp(['http', 'https'])}\z/
+      @stream = stream if valid
+      valid
+    end
+
+    def self.reset_stream
+      @stream = nil
+    end
+
+    def self.stream
+      @stream
+    end
+
     def self.help
       read_or_nil Config.help_file
     end

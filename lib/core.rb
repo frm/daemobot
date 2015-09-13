@@ -10,7 +10,10 @@ module Daemobot
       find: "find",
       setgreet: "set_greet",
       greet: "greet",
-      help: "print_help"
+      help: "print_help",
+      stream: "stream",
+      setstream: "set_stream",
+      resetstream: "reset_stream"
     }
 
     def initialize
@@ -96,6 +99,28 @@ module Daemobot
     def print_help(data)
       validate_command('help', data, nr_args: 0) do
         reply = Data.help || MessageBuilder.no_help_file
+        @mumble.reply(data, reply)
+      end
+    end
+
+    def set_stream(data)
+      validate_command('setstream', data, nr_args: 1, mod: true, sep: '\n') do |args|
+        set = Data.set_stream args.first
+        reply = set ? MessageBuilder.stream_set : MessageBuilder.invalid_stream
+        @mumble.reply(data, reply)
+      end
+    end
+
+    def reset_stream(data)
+      validate_command('resetstream', data, nr_args: 0, mod: true) do
+        Data.reset_stream
+        @mumble.reply(data, MessageBuilder.stream_reset)
+      end
+    end
+
+    def stream(data)
+      validate_command('stream', data, nr_args: 0) do
+        reply = Data.stream || MessageBuilder.no_stream
         @mumble.reply(data, reply)
       end
     end
