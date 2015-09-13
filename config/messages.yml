@@ -26,6 +26,8 @@ invalid_stream: "Invalid stream."
 
 stream_reset: "Stream was reset!"
 
+stats: "There are currently %{players}/%{capacity} players on %{server}. Total of %{games} games."
+
 greetings:
   - "Ohai!"
   - "Well, hello there!"

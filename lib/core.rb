@@ -1,6 +1,7 @@
 module Daemobot
   class Core
     TEXT_CALLBACKS = {
+      players: "server_stats",
       group: "private_group",
       pubgroup: "public_group",
       hi: "say_hi",
@@ -28,6 +29,13 @@ module Daemobot
 
     def terminate
       @mumble.disconnect
+    end
+
+    def server_stats(data)
+      reply = validate_command("players", data, nr_args: 1) do |args|
+        @tagpro.server_stats args.first
+      end
+      @mumble.reply(data, reply)
     end
 
     def private_group(data)

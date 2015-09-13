@@ -14,6 +14,11 @@ module Daemobot
       nil
     end
 
+    def self.stats_for(server, stats)
+      @messages[:stats] % { server: server, players: stats[:players],
+        capacity: stats[:playerCapacity], games: stats[:games] }
+    end
+
     def self.group_created(link, text = link)
       @messages[:group_created] % { group_link: link, text: text }
     end

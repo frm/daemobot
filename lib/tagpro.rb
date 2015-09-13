@@ -4,6 +4,7 @@ module Daemobot
   class TagPro
     HTTP_BASE = 'http://'
     GROUP_URI = '/groups/create'
+    STATS_URI = '/stats'
     KOALABEAST_URI = 'tagpro-%{server}.koalabeast.com'
     JUKEJUICE_URI = '%{server}.jukejuice.com'
     NEWCOMPTE_URI = '%{server}.newcompte.fr'
@@ -17,18 +18,45 @@ module Daemobot
       @mutex.synchronize {
         group_url = make_group server, publ: publ
         if group_url
-          Daemobot::MessageBuilder.group_created(group_url)
+          MessageBuilder.group_created(group_url)
         else
-          Daemobot::MessageBuilder.unknown_server(server)
+          MessageBuilder.unknown_server(server)
+        end
+      }
+    end
+
+    def server_stats(server)
+      @mutex.synchronize {
+        stats = get_server_stats(server)
+        if stats
+          MessageBuilder.stats_for(server, stats)
+        else
+          MessageBuilder.unknown_server(server)
         end
       }
     end
 
   private
 
-    def build_urls(server)
+    def build_group_urls(server)
       SERVERS.map do |url|
         HTTP_BASE + ( url % { server: server } ) + GROUP_URI
+      end
+    end
+
+    def build_stats_urls(server)
+      SERVERS.map do |url|
+        HTTP_BASE + ( url % { server: server } ) + STATS_URI
+      end
+    end
+
+    def stats_request(url)
+      begin
+        res = HTTParty.get url, follow_redirects: false
+        res.code == 404 ? nil : Utils.symbolize_hash(res.parsed_response)
+      rescue SocketError, Errno::ECONNREFUSED, URI::InvalidURIError
+        # See group_request rescues
+        nil
       end
     end
 
@@ -55,8 +83,16 @@ module Daemobot
 
     def make_group(server, publ: false)
       res = ""
-      build_urls(server).detect do |url|
+      build_group_urls(server).detect do |url|
         res = group_request(url, publ)
+      end
+      res
+    end
+
+    def get_server_stats(server)
+      res = {}
+      build_stats_urls(server).detect do |url|
+        res = stats_request(url)
       end
       res
     end
