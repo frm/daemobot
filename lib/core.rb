@@ -64,7 +64,7 @@ module Daemobot
       validate_command('find', data, nr_args: 1, sep: '\n') do |args|
         user = args.first
         channel = @mumble.find_user_channel user
-        reply = channel.nil ? MessageBuilder.user_not_found(user) :
+        reply = channel.nil? ? MessageBuilder.user_not_found(user) :
           MessageBuilder.found_user(channel[:username], channel[:name], channel[:url])
         @mumble.reply(data, reply)
       end
