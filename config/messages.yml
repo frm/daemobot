@@ -12,6 +12,10 @@ user_not_found: "%{user} not found."
 
 user_found: "Found %{user} on <a href=\"%{url}\">%{channel}</a>."
 
+greet_set: "Added greeting for %{user}."
+
+no_greet: "No custom greeting defined for %{user}."
+
 greetings:
   - "Ohai!"
   - "Well, hello there!"
