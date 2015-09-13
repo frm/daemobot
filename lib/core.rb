@@ -1,4 +1,3 @@
-require 'pry'
 module Daemobot
   class Core
     #TEXT_CALLBACKS = %w(private_group public_group say_hi reload move join)
