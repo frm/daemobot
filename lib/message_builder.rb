@@ -49,5 +49,9 @@ module Daemobot
     def self.method_missing(method_name, *args, &block)
       @messages[method_name.to_sym]
     end
+	
+	def self.wut
+		@messages[:wut]
+	end
   end
 end

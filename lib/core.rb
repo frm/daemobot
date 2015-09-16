@@ -1,5 +1,6 @@
 module Daemobot
   class Core
+    #TEXT_CALLBACKS = %w(private_group public_group say_hi reload move join)
     TEXT_CALLBACKS = {
       group: "private_group",
       pubgroup: "public_group",
@@ -8,13 +9,12 @@ module Daemobot
       move: "move",
       join: "join",
       find: "find",
-      setgreet: "set_greet",
-      greet: "greet"
+	  wut: "wut"
     }
 
     def initialize
-      @tagpro = TagPro.new
-      @mumble = MumbleDriver.new
+      @tagpro = Daemobot::TagPro.new
+      @mumble = Daemobot::MumbleDriver.new
     end
 
     def init
@@ -42,7 +42,7 @@ module Daemobot
 
     def say_hi(data)
       reply = validate_command("hi", data, nr_args: 0) do |args|
-        MessageBuilder.greet
+        Daemobot::MessageBuilder.greet
       end
       @mumble.reply(data, reply)
     end
@@ -63,32 +63,22 @@ module Daemobot
       validate_command('find', data, nr_args: 1, sep: '\n') do |args|
         user = args.first
         channel = @mumble.find_user_channel user
-        reply = channel.nil? ? MessageBuilder.user_not_found(user) :
-          MessageBuilder.found_user(channel[:username], channel[:name], channel[:url])
+        reply = channel ? Daemobot::MessageBuilder.found_user(channel[:username], channel[:name], channel[:url]) :
+          Daemobot::MessageBuilder.user_not_found(user)
         @mumble.reply(data, reply)
       end
     end
+	
+	def wut(data)
+		validate_command('wut', data, nr_args:0) do |args|
+			@mumble.reply(data, Daemobot::MessageBuilder.wut)
+		end
+	end
 
     def reload(data)
       validate_command("reload", data, nr_args: 0, mod: true) do
-        Config.load!
-        MessageBuilder.load!
-      end
-    end
-
-    def set_greet(data)
-      validate_command('setgreet', data, sep: '\n') do |args|
-        username = @mumble.find_user data.actor
-        Data.add_greet username, args.first
-        @mumble.reply(data, MessageBuilder.greet_set(username))
-      end
-    end
-
-    def greet(data)
-      validate_command('greet', data, nr_args: 0) do |args|
-        user = @mumble.find_user data.actor
-        reply = Data.greet(user) || MessageBuilder.no_greet(user)
-        @mumble.reply(data, reply)
+        Daemobot::Config.load!
+        Daemobot::MessageBuilder.load!
       end
     end
 
@@ -105,11 +95,11 @@ module Daemobot
     def validate_command(cmd, data, nr_args: nil, sep: ' ',  mod: false, &block)
       match = data.message.match(/^!#{cmd}(.*)?/)
       if mod && !is_mod?(data.actor)
-        MessageBuilder.no_permissions
+        Daemobot::MessageBuilder.no_permissions
       elsif match
         validate_args(match.captures, nr_args: nr_args, sep: sep, &block)
       else
-        MessageBuilder.invalid_command
+        Daemobot::MessageBuilder.invalid_command
       end
     end
 
@@ -118,7 +108,7 @@ module Daemobot
       if nr_args.nil? || args.length == nr_args
         yield args.map(&:strip)
       else
-        MessageBuilder.insuficient_arguments
+        Daemobot::MessageBuilder.insuficient_arguments
       end
     end
 
@@ -132,7 +122,7 @@ module Daemobot
 
     def is_mod?(session_id)
       name = @mumble.find_user(session_id)
-      Config.mods.include? name
+      Daemobot::Config.mods.include? name
     end
 
     def move_users(args)
