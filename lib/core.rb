@@ -96,6 +96,22 @@ module Daemobot
       end
     end
 
+    def set_greet(data)
+      validate_command('setgreet', data, sep: '\n') do |args|
+        username = @mumble.find_user data.actor
+        Data.add_greet username, args.first
+        @mumble.reply(data, MessageBuilder.greet_set(username))
+      end
+    end
+
+    def greet(data)
+      validate_command('greet', data, nr_args: 0) do |args|
+        user = @mumble.find_user data.actor
+        reply = Data.greet(user) || MessageBuilder.no_greet(user)
+        @mumble.reply(data, reply)
+      end
+    end
+
     def print_help(data)
       validate_command('help', data, nr_args: 0) do
         reply = Data.help || MessageBuilder.no_help_file
