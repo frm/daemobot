@@ -145,6 +145,7 @@ module Daemobot
     def init_configs
       @mumble.me.mute
       @mumble.me.deafen
+	  @mumble.set_comment(Data.help || MessageBuilder.no_help_file)
       @mumble.join_channel(Daemobot::Config.env_channel)
     end
   end
