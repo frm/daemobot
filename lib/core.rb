@@ -146,7 +146,7 @@ module Daemobot
     def validate_command(cmd, data, nr_args: nil, sep: ' ',  mod: false, &block)
       match = data.message.match(/^!#{cmd}(.*)?/)
       if banned?(data.actor)
-        ban_action
+        ban_action(data.actor)
       elsif mod && !is_mod?(data.actor)
         MessageBuilder.no_permissions
       elsif match
