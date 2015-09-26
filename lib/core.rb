@@ -145,7 +145,9 @@ module Daemobot
 
     def validate_command(cmd, data, nr_args: nil, sep: ' ',  mod: false, &block)
       match = data.message.match(/^!#{cmd}(.*)?/)
-      if mod && !is_mod?(data.actor)
+      if banned?(data.actor)
+        ban_action
+      elsif mod && !is_mod?(data.actor)
         MessageBuilder.no_permissions
       elsif match
         validate_args(match.captures, nr_args: nr_args, sep: sep, &block)
@@ -174,6 +176,16 @@ module Daemobot
     def is_mod?(session_id)
       name = @mumble.find_user(session_id)
       Config.mods.include? name
+    end
+
+    def banned?(session_id)
+      name = @mumble.find_user(session_id)
+      Config.bans.include? name
+    end
+
+    def ban_action(session_id)
+      name = @mumble.find_user(session_id)
+      @mumble.move_user name, Config.ban_channel
     end
 
     def move_users(args)
