@@ -60,7 +60,7 @@ module Daemobot
     end
 
     def move(data)
-      validate_command("move", data, sep: '\n', mod: true) do |args|
+      validate_command("move", data, sep: "<br />", mod: true) do |args|
         move_users(args)
       end
     end
@@ -177,6 +177,7 @@ module Daemobot
     end
 
     def move_users(args)
+      args = args.first.split("<br/>") if args.length < 2
       args.each do |user_set|
         move_user_set(user_set)
       end
