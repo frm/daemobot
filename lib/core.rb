@@ -32,22 +32,22 @@ module Daemobot
     end
 
     def server_stats(data)
-      reply = validate_command("players", data, nr_args: 1) do |args|
-        @tagpro.server_stats args.first
+      reply = validate_command("players", data, nr_args: nil) do |args|
+        @tagpro.server_stats(args.first || Config.default_server)
       end
       @mumble.reply(data, reply)
     end
 
     def private_group(data)
-      reply = validate_command("group", data, nr_args: 1) do |args|
-        @tagpro.create_group(args.first)
+      reply = validate_command("group", data, nr_args: nil) do |args|
+        @tagpro.create_group(args.first || Config.default_server)
       end
       @mumble.reply(data, reply)
     end
 
     def public_group(data)
-      reply = validate_command("pubgroup", data, nr_args: 1) do |args|
-        @tagpro.create_group(args.first, publ: true)
+      reply = validate_command("pubgroup", data, nr_args: nil) do |args|
+        @tagpro.create_group(args.first || Config.default_server, publ: true)
       end
       @mumble.reply(data, reply)
     end

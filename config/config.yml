@@ -9,6 +9,8 @@ address: 'mumble-eu.koalabeast.com'
 data_folder: 'data'
 help_file: 'data/help.html'
 
+default_server: chord
+
 mods:
   - Daemien
   - Carbon
