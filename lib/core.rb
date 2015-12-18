@@ -60,7 +60,7 @@ module Daemobot
     end
 
     def move(data)
-      validate_command("move", data, sep: '\n', mod: true) do |args|
+      validate_command("move", data, sep: "<br />", mod: true) do |args|
         move_users(args)
       end
     end
@@ -145,7 +145,9 @@ module Daemobot
 
     def validate_command(cmd, data, nr_args: nil, sep: ' ',  mod: false, &block)
       match = data.message.match(/^!#{cmd}(.*)?/)
-      if mod && !is_mod?(data.actor)
+      if banned?(data.actor)
+        ban_action(data.actor)
+      elsif mod && !is_mod?(data.actor)
         MessageBuilder.no_permissions
       elsif match
         validate_args(match.captures, nr_args: nr_args, sep: sep, &block)
@@ -176,7 +178,18 @@ module Daemobot
       Config.mods.include? name
     end
 
+    def banned?(session_id)
+      name = @mumble.find_user(session_id)
+      Config.bans.include? name
+    end
+
+    def ban_action(session_id)
+      name = @mumble.find_user(session_id)
+      @mumble.move_user name, Config.ban_channel
+    end
+
     def move_users(args)
+      args = args.first.split("<br/>") if args.length < 2
       args.each do |user_set|
         move_user_set(user_set)
       end
