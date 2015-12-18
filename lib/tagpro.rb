@@ -14,9 +14,9 @@ module Daemobot
       @mutex = Mutex.new
     end
 
-    def create_group(server, publ: false)
+    def create_group(server, publ: false, name: "")
       @mutex.synchronize {
-        group_url = make_group server, publ: publ
+        group_url = make_group server, publ: publ, name: name
         if group_url
           MessageBuilder.group_created(group_url)
         else
@@ -60,9 +60,9 @@ module Daemobot
       end
     end
 
-    def group_request(url, publ)
+    def group_request(url, publ, name)
       begin
-        res = HTTParty.post url, follow_redirects: false, :body => { public: publ }
+        res = HTTParty.post url, follow_redirects: false, :body => { public: publ ? "on" : "off", name: name }
         url.sub(/\/groups.*$/, res.response['location']) if res.code == 302
       rescue SocketError
         # Rescue from inexistent servers and locations
@@ -81,10 +81,10 @@ module Daemobot
       end
     end
 
-    def make_group(server, publ: false)
+    def make_group(server, publ: false, name: "")
       res = ""
       build_group_urls(server).detect do |url|
-        res = group_request(url, publ)
+        res = group_request(url, publ, name)
       end
       res
     end
