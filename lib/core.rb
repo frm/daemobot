@@ -14,7 +14,7 @@ module Daemobot
       help: "print_help",
       stream: "stream",
       setstream: "set_stream",
-      resetstream: "reset_stream"
+      resetstream: "reset_stream",
       wut: "wut"
     }
 
