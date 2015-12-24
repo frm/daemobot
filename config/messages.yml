@@ -10,6 +10,8 @@ no_permissions: "You don't have permissions to run that."
 
 user_not_found: "%{user} not found."
 
+hypetrain_not_found: "Hypetrain has left the station."
+
 user_found: "Found %{user} on <a href=\"%{url}\">%{channel}</a>."
 
 greet_set: "Added greeting for %{user}."
