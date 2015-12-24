@@ -44,7 +44,11 @@ module Daemobot
     end
 
     def self.user_not_found(username)
-      @messages[:user_not_found] % { user: username }
+      unless username.downcase == "hypetrain"
+        @messages[:user_not_found] % { user: username }
+      else
+        @messages[:hypetrain_not_found]
+      end
     end
 
     def self.found_user(username, channel, url = channel)
