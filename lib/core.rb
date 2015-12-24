@@ -15,6 +15,7 @@ module Daemobot
       stream: "stream",
       setstream: "set_stream",
       resetstream: "reset_stream"
+      wut: "wut"
     }
 
     def initialize
@@ -130,6 +131,12 @@ module Daemobot
       validate_command('stream', data, nr_args: 0) do
         reply = Data.stream || MessageBuilder.no_stream
         @mumble.reply(data, reply)
+      end
+    end
+    
+    def wut(data)
+      validate_command('wut', data, nr_args: 0) do
+        @mumble.reply(data, MessageBuilder.wut)
       end
     end
 

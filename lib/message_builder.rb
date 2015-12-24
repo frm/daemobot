@@ -54,6 +54,10 @@ module Daemobot
     def self.found_user(username, channel, url = channel)
       @messages[:user_found] % { user: username, channel: channel, url: url }
     end
+    
+    def self.wut
+      @messages[:wut]
+    end
 
     def self.method_missing(method_name, *args, &block)
       @messages[method_name.to_sym]
