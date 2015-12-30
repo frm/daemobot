@@ -15,6 +15,8 @@ module Daemobot
       stream: "stream",
       setstream: "set_stream",
       resetstream: "reset_stream",
+      bubble: "bubble",
+      rekt: "rekt",
       wut: "wut"
     }
 
@@ -89,6 +91,18 @@ module Daemobot
       end
     end
 
+    def rekt(data)
+      validate_command('rekt', data, nr_args: 0, sep: '\n') do |args|
+        @mumble.reply(data, bubblize("R E K T") )
+      end
+    end
+
+    def bubble(data)
+      validate_command('bubble', data, sep: '\n') do |args|
+        @mumble.reply(data, bubblize(args.first))
+      end
+    end
+
     def set_greet(data)
       validate_command('setgreet', data, sep: '\n') do |args|
         username = @mumble.find_user data.actor
@@ -133,7 +147,7 @@ module Daemobot
         @mumble.reply(data, reply)
       end
     end
-    
+
     def wut(data)
       validate_command('wut', data, nr_args: 0) do
         @mumble.reply(data, MessageBuilder.wut)
@@ -193,6 +207,10 @@ module Daemobot
     def ban_action(session_id)
       name = @mumble.find_user(session_id)
       @mumble.move_user name, Config.ban_channel
+    end
+
+    def bubblize(msg)
+      msg.tr('A-Za-z1-90', 'Ⓐ-Ⓩⓐ-ⓩ①-⑨⓪')
     end
 
     def move_users(args)
