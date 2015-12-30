@@ -196,9 +196,11 @@ module Daemobot
     end
 
     def move_users(args)
-      args = args.first.split("<br/>") if args.length < 2
-      args.each do |user_set|
-        move_user_set(user_set)
+      unless args.nil? || args.first.nil?
+        args = args.first.split("<br/>") if args.length < 2
+        args.each do |user_set|
+          move_user_set(user_set)
+        end
       end
     end
 
