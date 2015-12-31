@@ -99,7 +99,7 @@ module Daemobot
 
     def bubble(data)
       validate_command('bubble', data, sep: '\n') do |args|
-        @mumble.reply(data, bubblize(args.first))
+        @mumble.reply(data, bubblize(args.first)) if args.first
       end
     end
 
