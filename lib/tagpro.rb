@@ -55,7 +55,7 @@ module Daemobot
       begin
         res = HTTParty.get url, follow_redirects: false, timeout: HTTP_TIMEOUT
         res.code == 404 ? nil : Utils.symbolize_hash(res.parsed_response)
-      rescue SocketError, Errno::ECONNREFUSED, URI::InvalidURIError
+      rescue SocketError, Errno::ECONNREFUSED, URI::InvalidURIError, Net::OpenTimeout
         # See group_request rescues
         nil
       end
