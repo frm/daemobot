@@ -2,6 +2,7 @@ require 'httparty'
 
 module Daemobot
   class TagPro
+    HTTP_TIMEOUT = 5
     HTTP_BASE = 'http://'
     GROUP_URI = '/groups/create'
     STATS_URI = '/stats'
@@ -52,7 +53,7 @@ module Daemobot
 
     def stats_request(url)
       begin
-        res = HTTParty.get url, follow_redirects: false
+        res = HTTParty.get url, follow_redirects: false, timeout: HTTP_TIMEOUT
         res.code == 404 ? nil : Utils.symbolize_hash(res.parsed_response)
       rescue SocketError, Errno::ECONNREFUSED, URI::InvalidURIError
         # See group_request rescues
@@ -62,14 +63,14 @@ module Daemobot
 
     def group_request(url, publ, name)
       begin
-        res = HTTParty.post url, follow_redirects: false, :body => { public: publ ? "on" : "off", name: name }
+        res = HTTParty.post url, follow_redirects: false, :body => { public: publ ? "on" : "off", name: name }, :timeout => HTTP_TIMEOUT
         url.sub(/\/groups.*$/, res.response['location']) if res.code == 302
       rescue SocketError
         # Rescue from inexistent servers and locations
         # If it isn't valid, ignore it, nil will be returned
         # Otherwise the location will be sent
         nil
-      rescue Errno::ECONNREFUSED
+      rescue Errno::ECONNREFUSED, Net::OpenTimeout
         # Old, inactive servers still have active DNS rules
         # However, these don't give a socket error, but instead
         # a connection refused error. Handle those the same way
