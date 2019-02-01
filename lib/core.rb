@@ -50,7 +50,8 @@ module Daemobot
 
     def public_group(data)
       reply = validate_command("pubgroup", data, nr_args: nil) do |args|
-        @tagpro.create_group(args.first || Config.default_server, publ: true, name: args[1..-1].join(" ") || "")
+        name = args.length > 1 ? args[1..-1].join(" ") : ""
+        @tagpro.create_group(args.first || Config.default_server, publ: true, name: name)
       end
       @mumble.reply(data, reply)
     end
