@@ -1,7 +1,7 @@
 ENV: 'DEV'
-DEV_CHANNEL: Daemiens Bot Lounge
-PRODUCTION_CHANNEL: Daemiens Bot Lounge
-PANIC_CHANNEL: Daemiens Bot Lounge
+DEV_CHANNEL: Chill Lounge
+PRODUCTION_CHANNEL: Chill Lounge
+PANIC_CHANNEL: Chill Lounge
 
 username: Daemobot
 address: 'mumble-eu.koalabeast.com'
@@ -9,13 +9,14 @@ address: 'mumble-eu.koalabeast.com'
 data_folder: 'data'
 help_file: 'data/help.html'
 
-default_server: chord
+default_server: test
 
 mods:
   - Daemien
   - Carbon
   - Damien
   - Ruud
+  - hf
   - ' Comacomacomakip'
 
 bans:

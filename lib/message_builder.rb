@@ -27,6 +27,10 @@ module Daemobot
       @messages[:unknown_server] % { server: server }
     end
 
+    def self.swj_server(server)
+      @messages[:swj_server] % { server: server }
+    end
+
     def self.invalid_command
       @messages[:invalid_command]
     end

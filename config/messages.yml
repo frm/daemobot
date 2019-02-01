@@ -2,6 +2,8 @@ group_created: "A group has been created in <a href=\"%{group_link}\">%{text}</a
 
 unknown_server: "Unknown server was provided: %{server}."
 
+swj_server: "<tt>%{server}</tt> is a SWJ (Single World Joiner) server, which disallows local groups. You can create a SWJ group using <tt>!group</tt> with no arguments."
+
 invalid_command: "Invalid command."
 
 insuficient_arguments: "Invalid number of arguments were provided."

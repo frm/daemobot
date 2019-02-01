@@ -11,15 +11,21 @@ module Daemobot
     NEWCOMPTE_URI = '%{server}.newcompte.fr'
     SERVERS = [NEWCOMPTE_URI, JUKEJUICE_URI, KOALABEAST_URI]
 
+    GROUP_SUCCESS = 0
+    GROUP_FAILED = 1
+    GROUP_SWJ = 2
+
     def initialize
       @mutex = Mutex.new
     end
 
     def create_group(server, publ: false, name: "")
       @mutex.synchronize {
-        group_url = make_group server, publ: publ, name: name
-        if group_url
+        status, group_url = make_group server, publ: publ, name: name
+        if status == GROUP_SUCCESS
           MessageBuilder.group_created(group_url)
+        elsif status == GROUP_SWJ
+          MessageBuilder.swj_server(server)
         else
           MessageBuilder.unknown_server(server)
         end
@@ -64,30 +70,38 @@ module Daemobot
     def group_request(url, publ, name)
       begin
         res = HTTParty.post url, follow_redirects: false, :body => { public: publ ? "on" : "off", name: name }, :timeout => HTTP_TIMEOUT
-        url.sub(/\/groups.*$/, res.response['location']) if res.code == 302
+        if res.code == 302
+          [GROUP_SUCCESS, url.sub(/\/groups.*$/, res.response['location'])]
+        elsif res.code == 301
+          # SWJ servers are not supported
+          [GROUP_SWJ, nil]
+        else
+          [GROUP_FAILED, nil]
+        end
       rescue SocketError
         # Rescue from inexistent servers and locations
         # If it isn't valid, ignore it, nil will be returned
         # Otherwise the location will be sent
-        nil
+        [GROUP_FAILED, nil]
       rescue Errno::ECONNREFUSED, Net::OpenTimeout
         # Old, inactive servers still have active DNS rules
         # However, these don't give a socket error, but instead
         # a connection refused error. Handle those the same way
-        nil
+        [GROUP_FAILED, nil]
       rescue URI::InvalidURIError
         # Don't care about invalid URIs
         # Don't do anything
-        nil
+        [GROUP_FAILED, nil]
       end
     end
 
     def make_group(server, publ: false, name: "")
-      res = ""
+      status, group_url = [GROUP_FAILED, nil]
       build_group_urls(server).detect do |url|
-        res = group_request(url, publ, name)
+        status, group_url = group_request(url, publ, name)
+        status != GROUP_FAILED
       end
-      res
+      [status, group_url]
     end
 
     def get_server_stats(server)
